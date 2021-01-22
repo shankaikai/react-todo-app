@@ -7,25 +7,34 @@ import {v4 as uuidv4} from 'uuid'
 class TodoContainer extends React.Component {
 
     state = {
-        todos: [
-            {
-            id: uuidv4(),
-            title: "Setup development environment",
-            completed: true
-            },
-            {
-            id: uuidv4(),
-            title: "Develop website and add content",
-            completed: false
-            },
-            {
-            id: uuidv4(),
-            title: "Deploy to live server",
-            completed: false
-            }
-        ]
+        todos: []
     }
     
+    // Use a REST API to pull fake todo items 
+    // componentDidMount() { // this function is executed directly after 
+    //     fetch("https://jsonplaceholder.typicode.com/todos") // fetch API used 
+    //       .then(response => response.json())
+    //       .then(data => console.log(data));
+    //   }
+    componentDidMount() {
+        const temp = localStorage.getItem("todos")
+        const loadedTodos = JSON.parse(temp)
+        if (loadedTodos) {
+            this.setState({
+                todos: loadedTodos
+            })
+        }
+    }
+
+    // componentDidUpdate() is called after every state or props change
+    // check if prevState todos is different and update the local storage if so
+    componentDidUpdate(prevProps, prevState) {
+        if(prevState.todos !== this.state.todos) {
+            const temp = JSON.stringify(this.state.todos)
+            localStorage.setItem("todos", temp)
+        }
+    }
+
     // handleChange = (id) => {
     //     this.setState({
     //         todos: this.state.todos.map(todo => {
@@ -78,7 +87,7 @@ class TodoContainer extends React.Component {
     setUpdate = (updatedTitle, id) => {
         this.setState({
             todos: this.state.todos.map(todo => {
-                if(todo.id == id) {
+                if(todo.id === id) {
                     todo.title = updatedTitle
                 }
                 return todo
