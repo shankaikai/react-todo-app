@@ -1,18 +1,27 @@
 import React, {useState} from 'react'
+import { FaPlusCircle } from "react-icons/fa"
 
 // using ReactHook
 const InputTodo = props => {
-    const [title, setTitle] = useState("")
+    const [inputText, setInputText] = useState({
+        title: ""
+    })
+    // If object as state value, React will not merge the state returned by the useState Hook with that of the update passed to it
 
     const onChange = e => {
-        setTitle(e.target.value)
+        setInputText({
+            ...inputText,
+            [e.target.name]: e.target.value,
+        })
     }
 
     const handleSubmit = e => {
         e.preventDefault()
-        if(title.trim()) {
-            props.addTodoProps(title)
-            setTitle("")
+        if(inputText.title.trim()) {
+            props.addTodoProps(inputText.title)
+            setInputText({
+                title: ""
+            })
         } else {
             alert("Please write a todo item")
         }
@@ -24,12 +33,12 @@ const InputTodo = props => {
                 type = "text"
                 className = "input-text"
                 placeholder = "Add todo..."
-                value = {title}
+                value = {inputText.title}
                 name = "title"
                 onChange = {onChange}
             />
             <button className = "input-submit">
-                Submit
+                <FaPlusCircle/>
             </button>
         </form>
     )
