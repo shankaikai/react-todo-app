@@ -2,7 +2,11 @@ import React, { useState, useEffect } from "react"
 import TodosList from "./TodosList"
 import Header from './Header'
 import InputTodo from './InputTodo'
+import About from "../pages/About"
+import NotMatch from "../pages/NotMatch"
+import Navbar from "./Navbar"
 import {v4 as uuidv4} from 'uuid'
+import { Route, Switch } from "react-router-dom"
 
 const TodoContainer = () => {
 
@@ -116,21 +120,36 @@ const TodoContainer = () => {
 
 
     return (
-        <div className = "container">
-            <div className = "inner">
-                <Header/>
-                <InputTodo
-                    addTodoProps = {addTodoItem}
-                />
-                {/* Pass the function to the child component using props */}
-                <TodosList 
-                    todos = {todos} 
-                    handleChangeProps = {handleChange}
-                    deleteTodoProps = {delTodo}
-                    setUpdateProps = {setUpdate}
-                />
+        <>
+        <Navbar></Navbar>
+        {/*Use exact to match the entire URL */}
+        <Switch>
+        <Route exact path = "/">
+            <div className = "container">
+                <div className = "inner">
+                    <Header/>
+                    <InputTodo
+                        addTodoProps = {addTodoItem}
+                    />
+                    {/* Pass the function to the child component using props */}
+                    <TodosList 
+                        todos = {todos} 
+                        handleChangeProps = {handleChange}
+                        deleteTodoProps = {delTodo}
+                        setUpdateProps = {setUpdate}
+                    />
+                </div>
             </div>
-        </div>
+        </Route>
+        <Route path = "/about">
+            <About/>
+        </Route>
+        {/* serves as fallback as it matches every instance */}
+        <Route path = "*">
+            <NotMatch/>
+        </Route>
+        </Switch>
+        </>
     )
     
     
